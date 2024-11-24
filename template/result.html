@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <!-- Your custom stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Arimo', sans-serif; /* Utilisation de la police Arimo */
+            background-color: #f8f9fa; /* Couleur de fond légère */
+            margin: 0; /* Supprime les marges par défaut */
+            padding: 0; /* Supprime les rembourrages par défaut */
+        }
+        .image-container {
+            position: relative; /* Définir la position relative pour permettre le positionnement absolu du contenu */
+            width: 100%; /* Largeur totale du conteneur */
+            height: 100vh; /* Hauteur de la fenêtre du navigateur */
+            overflow: hidden; /* Cache tout contenu débordant de l'image */
+        }
+
+        .image-container img {
+            width: 100%; /* La largeur de l'image occupe toute la largeur du conteneur parent */
+            height: 100%; /* La hauteur de l'image occupe toute la hauteur du conteneur parent */
+            object-fit: cover; /* Ajuste la taille de l'image pour couvrir toute la zone */
+            object-position: center; /* Centre l'image horizontalement et verticalement */
+        }
+
+        .container {
+            position: relative; /* Définir la position relative pour que le conteneur soit situé dans l'image */
+            z-index: 1; /* Assure que le contenu à l'intérieur du conteneur est au-dessus de l'image de fond */
+            width: 100%; /* Largeur totale du conteneur */
+            height: 100vh; /* Hauteur de la fenêtre du navigateur */
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive; /* Utilisation de la police Pacifico */
+            text-align: center; /* Centrer le titre */
+            margin-bottom: 30px; /* Marge en bas du titre */
+            color: red;
+            position: absolute; /* Position absolue par rapport à l'image de fond */
+            top: 3%; /* Aligner le titre verticalement en haut */
+            left: 50%; /* Aligner le titre horizontalement au milieu */
+            transform: translateX(-50%); /* Centrer le titre horizontalement */
+            z-index: 2; /* Assure que le titre est au-dessus de l'image de fond */
+        }
+        .result-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Centrer horizontalement les éléments */
+            position: absolute; /* Position absolue par rapport à l'image de fond */
+            top: 50%; /* Aligner le conteneur verticalement au milieu */
+            left: 50%; /* Aligner le conteneur horizontalement au milieu */
+            transform: translate(-50%, -50%); /* Centrer le conteneur */
+            z-index: 2; /* Assure que le conteneur est au-dessus de l'image de fond */
+        }
+        .prediction {
+            background-color: #fff; /* Fond blanc pour chaque prédiction */
+            border: 1px solid #ccc; /* Bordure autour de chaque prédiction */
+            border-radius: 5px; /* Coins arrondis */
+            padding: 20px; /* Espace intérieur */
+            margin: 10px; /* Marge entre les prédictions */
+            width: 300px; /* Largeur fixe pour chaque prédiction */
+        }
+        .label,
+        .attack,
+        .category {
+            font-family: 'Hind', sans-serif; /* Utilisation de la police Hind */
+            margin-bottom: 10px; /* Marge en bas de chaque champ */
+            color: #333; /* Couleur du texte */
+            font-size: 16px; /* Taille de la police */
+        }
+        .danger-icon {
+            color: red; /* Couleur de l'icône de danger */
+            margin-right: 5px; /* Marge à droite de l'icône */
+        }
+        .attack {
+            color: #dc3545; /* Couleur rouge pour le texte Attack */
+        }
+        .category {
+            color: #007bff; /* Couleur bleue pour le texte Attack Category */
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img src="{{url_for('static', filename='circle-5090539_1280_1_.jpeg')}}" alt="breast-swelling">
+        <h1>Prediction Result</h1>
+        <div class="result-container">
+            {% for index, row in result.iterrows() %}
+            <div class="prediction">
+                <div class="label">Label:  
+                    {% if row['Label'] == 'Attack' %}
+                        <i class="fas fa-exclamation-circle danger-icon"></i>
+                    {% endif %}
+                    {{ row['Label'] }}
+                </div>
+                <div class="attack">Attack:  {{ row['Attack'] }}</div>
+                <div class="category">Attack Category: {{ row['Attack_Category'] }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+
+
